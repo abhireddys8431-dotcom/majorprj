@@ -1,0 +1,53 @@
+/* Student Dashboard Specific Styles */
+
+.sidebar {
+    position: sticky;
+    top: 70px;
+    height: calc(100vh - 90px);
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.sidebar .nav-link {
+    color: #475569 !important;
+    font-size: 0.95rem;
+    padding: 0.75rem 1rem !important;
+    margin-bottom: 0.35rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.25s ease;
+}
+
+.sidebar .nav-link:hover {
+    color: #c41e3a !important;
+    background: #fff1f2;
+}
+
+.sidebar .nav-link.active {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #c41e3a 0%, #991b1b 100%);
+    box-shadow: 0 4px 12px rgba(196, 30, 58, 0.3);
+    font-weight: 600;
+}
+
+.tab-content {
+    animation: fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.canvas-container {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+}

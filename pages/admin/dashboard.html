@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Smart Library</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="../../index.html">📚 Smart Library Admin</a>
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-light me-2">Librarian: <strong id="admin-name">System Administrator</strong></span>
+                <a href="#" onclick="logoutUser()" class="btn btn-outline-light btn-sm">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid py-4 px-4">
+        <div class="row g-4">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2">
+                <div class="admin-sidebar">
+                    <h6 class="text-uppercase text-muted fw-bold mb-3 small">Admin Console</h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" id="catalog-tab">📚 Book Catalog Management</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="barcode-tab">📱 Barcode Scanner (QuaggaJS)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="floor-tab">🗺️ Visual Floor Editor</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="analytics-tab">📊 Library Analytics</a>
+                        </li>
+                        <li class="nav-item mt-3 pt-3 border-top">
+                            <a class="nav-link text-secondary" href="../../index.html">🏠 Main Landing Page</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content Area -->
+            <main class="col-md-9 col-lg-10">
+                <!-- 1. Catalog Management Tab -->
+                <div id="catalog-content" class="tab-content">
+                    <div class="card p-4 border-0 shadow-sm mb-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h3 class="fw-bold mb-1">📚 Book Catalog Management</h3>
+                                <p class="text-muted small mb-0">View catalog inventory, available copies, shelf assignments, and add new titles.</p>
+                            </div>
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addBookModal">+ Add New Book</button>
+                        </div>
+                    </div>
+                    <div id="books-table"></div>
+                </div>
+
+                <!-- 2. Barcode Scanner Tab -->
+                <div id="barcode-content" class="tab-content" style="display:none;">
+                    <div class="card p-4 border-0 shadow-sm mb-4">
+                        <h3 class="fw-bold mb-1">📱 Automated Barcode Scanner & Open Library Auto-Catalog</h3>
+                        <p class="text-muted small">Scan ISBN barcode using camera feed or input code to auto-retrieve publisher and author metadata.</p>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card p-4 shadow-sm border-0 text-center">
+                                <div id="video-preview-box" class="mx-auto mb-3">
+                                    <video id="video" width="380" height="280" class="rounded" style="background:#000; max-width: 100%;"></video>
+                                </div>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button class="btn btn-primary" onclick="startScanning()">▶ Start Camera Scan</button>
+                                    <button class="btn btn-secondary" onclick="stopScanning()">⏹ Stop Camera</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="scan-result" class="card p-4 shadow-sm border-0 h-100">
+                                <div class="alert alert-info mb-0">Click "Start Camera Scan" or enter ISBN to begin barcode detection.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Visual 2D Floor Mapping Editor Tab -->
+                <div id="floor-content" class="tab-content" style="display:none;">
+                    <div class="card p-4 border-0 shadow-sm mb-4">
+                        <h3 class="fw-bold mb-1">🗺️ Interactive 2D Visual Floor Editor</h3>
+                        <p class="text-muted small">Click anywhere on the blueprint grid to update book map pin coordinates (X, Y).</p>
+                    </div>
+                    <div class="card p-4 border-0 shadow-sm text-center">
+                        <canvas id="floorEditor" width="900" height="550" class="rounded border shadow-sm w-100" style="max-width: 900px; cursor: crosshair;"></canvas>
+                    </div>
+                </div>
+
+                <!-- 4. Analytics Dashboard Tab -->
+                <div id="analytics-content" class="tab-content" style="display:none;">
+                    <div class="card p-4 border-0 shadow-sm mb-4">
+                        <h3 class="fw-bold mb-1">📊 Library Analytics & Circulation Trends</h3>
+                        <p class="text-muted small">Real-time stats on monthly issues, popular books, and category metrics.</p>
+                    </div>
+                    <div class="card p-4 border-0 shadow-sm">
+                        <canvas id="analyticsChart" height="120"></canvas>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add Book Modal -->
+    <div class="modal fade" id="addBookModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">+ Add New Book to Catalog</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addBookForm">
+                        <div class="mb-2"><input type="text" class="form-control" placeholder="ISBN (e.g. 9780131103627)" id="isbn" required></div>
+                        <div class="mb-2"><input type="text" class="form-control" placeholder="Book Title" id="title" required></div>
+                        <div class="mb-2"><input type="text" class="form-control" placeholder="Author Name" id="author" required></div>
+                        <div class="mb-2"><input type="text" class="form-control" placeholder="Category (e.g. Computer Science)" id="category"></div>
+                        <div class="mb-3"><input type="number" class="form-control" placeholder="Total Copies Quantity" id="quantity" value="3" required></div>
+                        <button type="submit" class="btn btn-success w-100">Add Book &rarr;</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <script src="../../assets/js/admin.js"></script>
+    <script src="../../assets/js/barcode-scanner.js"></script>
+    <script src="../../assets/js/analytics.js"></script>
+    <script>
+        fetch('../../backend/api.php?action=get_user_info')
+            .then(r => r.json())
+            .then(data => {
+                if (data.success && data.user) {
+                    document.getElementById('admin-name').innerText = data.user.name;
+                }
+            }).catch(() => {});
+
+        function logoutUser() {
+            fetch('../../backend/api.php?action=logout').then(() => window.location.href = '../shared/login.html');
+        }
+    </script>
+</body>
+</html>

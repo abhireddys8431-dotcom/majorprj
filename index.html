@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Library Management System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">📚 Smart Library</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto" id="auth-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="pages/shared/login.html">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary text-white ms-2" href="pages/shared/register.html">Register Account</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+        <div class="hero-card mb-5">
+            <h1 class="hero-title">Smart Library Management System</h1>
+            <p class="hero-subtitle">Next-generation academic portal featuring 2D visual shelf map navigation, QuaggaJS automated barcode scanner, SQL recommendation engine, and live RSS updates.</p>
+            <div class="d-flex gap-3">
+                <a class="btn btn-primary btn-lg px-4" href="pages/shared/login.html">Student & Admin Login</a>
+                <a class="btn btn-outline-light btn-lg px-4" href="pages/shared/register.html">Register Account</a>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 p-4">
+                    <div class="fs-1 text-danger mb-3">📱</div>
+                    <h4 class="card-title">Barcode Scanning</h4>
+                    <p class="text-muted">Instant camera barcode scanning powered by QuaggaJS and Open Library REST API for rapid cataloging.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 p-4">
+                    <div class="fs-1 text-warning mb-3">🗺️</div>
+                    <h4 class="card-title">2D Floor Shelf Mapping</h4>
+                    <p class="text-muted">Interactive visual canvas floor map pinpoints exact shelf location and aisle coordinates for every book.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 p-4">
+                    <div class="fs-1 text-success mb-3">⭐</div>
+                    <h4 class="card-title">AI Recommendations</h4>
+                    <p class="text-muted">Content-based and peer-collaborative SQL filtering engine delivering customized book suggestions.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        fetch('backend/api.php?action=get_user_info')
+            .then(r => r.json())
+            .then(data => {
+                if (data.success && data.user) {
+                    document.getElementById('auth-nav').innerHTML = `
+                        <li class="nav-item">
+                            <a class="nav-link" href="pages/${data.user.role}/dashboard.html">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-warning" href="#" onclick="logoutUser()">Logout (${data.user.name})</a>
+                        </li>
+                    `;
+                }
+            }).catch(() => {});
+
+        function logoutUser() {
+            fetch('backend/api.php?action=logout').then(() => window.location.reload());
+        }
+    </script>
+</body>
+</html>

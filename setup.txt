@@ -1,0 +1,59 @@
+SMART LIBRARY MANAGEMENT SYSTEM - SETUP & IMPLEMENTATION GUIDE
+Engineering Major Project 2025-2026
+========================================================================
+
+PROJECT DIRECTORY STRUCTURE:
+----------------------------
+library-management/
+├── assets/
+│   ├── css/
+│   │   ├── style.css
+│   │   ├── student.css
+│   │   └── admin.css
+│   ├── js/
+│   │   ├── student.js
+│   │   ├── admin.js
+│   │   ├── barcode-scanner.js
+│   │   └── analytics.js
+│   └── images/
+├── backend/
+│   ├── config/
+│   │   └── db.php
+│   ├── controllers/
+│   │   ├── AuthController.php
+│   │   ├── BookController.php
+│   │   └── RecommendationEngine.php
+│   ├── utils/
+│   │   ├── OpenLibraryAPI.php
+│   │   └── RSSParser.php
+│   ├── schema.sql
+│   └── api.php
+├── pages/
+│   ├── student/
+│   │   └── dashboard.php
+│   ├── admin/
+│   │   └── dashboard.php
+│   └── shared/
+│       ├── login.php
+│       └── register.php
+├── index.php
+├── test_connection.php
+├── server.js
+├── package.json
+├── setup.txt
+└── .gitignore
+
+LOCAL PHP + MYSQL (XAMPP) ENVIRONMENT SETUP:
+---------------------------------------------
+1. Start Apache & MySQL services in XAMPP Control Panel.
+2. Open http://localhost/phpmyadmin/ and create database: library_management_db
+3. Import backend/schema.sql into library_management_db.
+4. Access app at http://localhost/library-management/
+
+INSTANT NODE.JS RUNNER (NO XAMPP REQUIRED):
+-------------------------------------------
+1. Run `npm install` in the project root.
+2. Run `node server.js`
+3. Open http://localhost:3000 in your browser.
+4. Default Admin Login: admin@library.com / admin123
+5. Default Student Login: student@library.com / student123

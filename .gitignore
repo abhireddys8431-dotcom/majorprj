@@ -1,0 +1,10 @@
+config/db.php
+*.log
+.env
+node_modules/
+.DS_Store
+library_management.sqlite
+dist/
+.wrangler/
+frontend/dist/
+backend/.wrangler/
